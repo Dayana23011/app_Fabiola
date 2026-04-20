@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fabiola - Piscinas</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="theme-color" content="#163a63" />
+  <style>
+    :root{
+      --bg1:#f5f2ee;
+      --bg2:#ece6de;
+      --card:rgba(255,255,255,.82);
+      --line:#ddd4c8;
+      --text:#243142;
+      --muted:#6f7b88;
+      --accent:#163a63;
+      --accent2:#295d8f;
+      --ok:#2f7d57;
+      --warn:#9a6b10;
+      --danger:#b04a4a;
+      --shadow:0 18px 45px rgba(44,52,64,.12);
+      --radius:28px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);}
+    body{
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.65) 0%, transparent 28%),
+        radial-gradient(circle at top right, rgba(255,255,255,.35) 0%, transparent 25%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      padding-bottom:32px;
+    }
+
+    .wrap{
+      max-width:1280px;
+      margin:0 auto;
+      padding:max(16px, env(safe-area-inset-top)) 14px 18px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg, #12365f, #1e5ea8);
+      color:white;
+      border-radius:34px;
+      padding:24px 18px 26px;
+      box-shadow:0 24px 50px rgba(23,39,56,.22);
+      position:relative;
+      overflow:hidden;
+      margin-bottom:18px;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      right:-80px;
+      top:-80px;
+      width:240px;
+      height:240px;
+      border-radius:50%;
+      background:rgba(255,255,255,.12);
+    }
+
+    .hero h1{
+      margin:0;
+      font-size:clamp(1.8rem,4vw,3rem);
+      letter-spacing:.3px;
+      text-align:center;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      justify-content:center;
+      font-family:Georgia,serif;
+      font-weight:600;
+    }
+
+    .app-mark{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      background:rgba(255,255,255,.16);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
+      font-size:1.05em;
+      animation:spinIn 1s ease-out both, floatGlow 3.2s ease-in-out 1.05s infinite, markSway 3s ease-in-out 1.3s infinite;
+      transform-origin:center;
+    }
+
+    .subtitle{
+      text-align:center;
+      margin-top:12px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.88);
+      font-size:1rem;
+    }
+
+    .dayana-name{
+      display:inline-block;
+      animation:dayanaBloom 1.9s cubic-bezier(.2,.8,.2,1) .15s both, nameFloat 3.2s ease-in-out 2s infinite;
+      font-weight:700;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.99);
+      position:relative;
+      font-size:1.25rem;
+      font-family:Georgia, "Times New Roman", serif;
+      font-style:italic;
+    }
+
+    .dayana-name::after{
+      content:"";
+      position:absolute;
+      left:-8%;
+      top:0;
+      width:38%;
+      height:100%;
+      background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.65), rgba(255,255,255,0));
+      transform:skewX(-22deg) translateX(-180%);
+      animation:dayanaSweep 1.7s ease-out .45s 1 forwards;
+      pointer-events:none;
+      mix-blend-mode:screen;
+    }
+
+    .top-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:20px;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--card);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(255,255,255,.65);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:26px;
+      animation:fadeUp .55s ease both;
+    }
+
+    .card h2,.card h3{margin:0 0 16px;letter-spacing:.01em;}
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .field.full{grid-column:1/-1}
+    label{display:block;font-size:.92rem;font-weight:700;margin-bottom:7px;}
+
+    input,select,textarea{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:18px;
+      padding:12px 14px;
+      font-size:.98rem;
+      outline:none;
+      transition:.2s ease;
+      color:var(--text);
+    }
+
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(41,93,143,.12);
+    }
+
+    textarea{min-height:92px;resize:vertical;}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+    button{
+      border:none;border-radius:18px;padding:13px 18px;font-size:.96rem;font-weight:700;
+      cursor:pointer;transition:all .22s ease;
+    }
+    button:hover{transform:translateY(-1px) scale(1.01)}
+    .primary{background:linear-gradient(135deg,#12365f,#1e5ea8); color:#fff; box-shadow:0 14px 28px rgba(18,43,69,.22);}
+    .secondary{background:#fff7f5;color:var(--text); border:1px solid var(--line);}
+    .warning{background:#fbf1dc;color:var(--warn); border:1px solid #ead9b0;}
+    .danger{background:#fff0f0;color:var(--danger); border:1px solid #efcbcb;}
+
+    .mes-inline{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      flex-wrap:wrap;
+      margin-bottom:6px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+    .stat{
+      padding:18px;
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(248,245,239,.96));
+      border:1px solid var(--line);
+    }
+    .stat .k{font-size:.8rem;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em;}
+    .stat .v{font-size:1.6rem;font-weight:800;}
+
+    .toolbar{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:12px;
+      margin:22px 0 14px;
+      align-items:center;
+    }
+
+    .table-wrap{
+      overflow:auto;
+      border-radius:30px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.92);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+    }
+    table{width:100%;border-collapse:collapse;min-width:1380px;}
+    thead th{
+      position:sticky;top:0;background:#f9f3f1;color:#4c4c4c;text-align:left;
+      padding:14px;font-size:.9rem;border-bottom:1px solid var(--line);white-space:nowrap;
+    }
+    tbody td{padding:14px;border-bottom:1px solid #edf2fc;vertical-align:top;font-size:.96rem;}
+    tbody tr:hover{background:#eefcff; transform:translateY(-1px);}
+    .mini-actions{display:flex;flex-wrap:wrap;gap:8px;}
+    .tag{
+      display:inline-block;padding:6px 10px;border-radius:999px;background:#eef4ff;color:#40608b;
+      font-size:.82rem;font-weight:700;border:1px solid #dbe7ff;
+    }
+    .employee-badge{
+      display:inline-block;padding:7px 11px;border-radius:999px;font-weight:800;font-size:.82rem;
+      background:linear-gradient(135deg,#edf3ff,#f4eeff);border:1px solid #dfe4ff;
+    }
+
+    dialog{
+      border:none;border-radius:24px;width:min(860px, calc(100vw - 24px));
+      box-shadow:0 30px 70px rgba(20,42,80,.28);padding:0;
+    }
+    dialog::backdrop{background:rgba(12,24,47,.45)}
+    .modal-head{
+      padding:18px 22px;background:linear-gradient(135deg,#12365f,#1e5ea8);
+      color:#fff;border-radius:24px 24px 0 0;
+    }
+    .modal-body{padding:20px 22px}
+    .muted{color:var(--muted)}
+    .empty{text-align:center;padding:28px;color:var(--muted);}
+    .foot{margin-top:18px;text-align:center;color:var(--muted);font-size:.9rem;}
+
+    .month-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:14px;
+      margin-top:12px;
+    }
+    .month-card{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.72);
+      border-radius:20px;
+      padding:14px;
+    }
+    .month-card h4{margin:0 0 10px;font-size:1rem;}
+    .month-card label{font-size:.84rem;margin-bottom:6px;}
+    .month-card input,.month-card textarea{margin-bottom:10px;}
+    .month-summary{margin-top:10px;font-size:.9rem;color:var(--muted);font-weight:700;}
+    .total-mes-highlight{font-size:1.22rem;font-weight:900;font-style:italic;color:#0f4fa8;text-shadow:0 0 12px rgba(15,79,168,.18), 0 0 18px rgba(41,93,143,.12);}
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px);} to {opacity:1; transform:translateY(0);} }
+    @keyframes spinIn { 0% { transform:rotate(-220deg) scale(.72); opacity:0;} 100% { transform:rotate(0deg) scale(1); opacity:1;} }
+    @keyframes floatGlow {
+      0% { transform:translateY(0) scale(1); box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 8px 18px rgba(18,43,69,.12); }
+      50% { transform:translateY(-2px) scale(1.03); box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 14px 26px rgba(18,43,69,.18); }
+      100% { transform:translateY(0) scale(1); box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 8px 18px rgba(18,43,69,.12); }
+    }
+    @keyframes dayanaBloom {
+      0% { opacity:0; transform:translateY(8px) scale(.96); letter-spacing:.28em; text-shadow:0 0 0 rgba(255,255,255,0); }
+      55% { opacity:1; transform:translateY(0) scale(1.03); letter-spacing:.24em; text-shadow:0 0 18px rgba(255,255,255,.55), 0 0 36px rgba(255,255,255,.22);}
+      100% { opacity:.98; transform:translateY(0) scale(1); letter-spacing:.16em; text-shadow:0 0 8px rgba(255,255,255,.18);}
+    }
+    @keyframes dayanaSweep {
+      from { transform:skewX(-22deg) translateX(-180%); opacity:0; }
+      20% { opacity:1; }
+      to { transform:skewX(-22deg) translateX(420%); opacity:0; }
+    }
+    @keyframes nameFloat {0%{transform:translateY(0)}50%{transform:translateY(-2px)}100%{transform:translateY(0)}}
+    @keyframes markSway {0%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-2px) rotate(4deg)}100%{transform:translateY(0) rotate(0deg)}}
+
+    @media (max-width:980px){
+      .top-grid{grid-template-columns:1fr}
+      .toolbar{grid-template-columns:1fr}
+    }
+    @media (max-width:720px){
+      .wrap{padding:10px}
+      .hero{padding:18px 16px 22px;border-radius:26px}
+      .card{padding:16px;border-radius:22px}
+      .form-grid,.stats{grid-template-columns:1fr}
+      button{width:100%}
+      .actions{display:grid;grid-template-columns:1fr}
+      .toolbar{gap:10px}
+      input,select,textarea{font-size:16px;}
+      .hero h1{font-size:1.45rem; line-height:1.2}
+    }
+
+    .admin-only{display:none !important;}
+    .worker-note{
+      margin: 0 0 18px;
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(255,255,255,.65);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-fabiola{
+      margin-bottom:20px;
+      padding:22px 20px;
+      border-radius:24px;
+      background: linear-gradient(135deg,#0f5bd8,#1e7bff);
+      color:white;
+      box-shadow:0 12px 28px rgba(15,91,216,.25);
+      animation: fadeInUp .7s ease both;
+    }
+    .hero-inner{
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+    .hero-mark{
+      font-size:40px;
+      font-weight:800;
+      width:64px;
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:18px;
+      background:rgba(255,255,255,.18);
+      box-shadow:0 0 18px rgba(255,255,255,.45);
+      text-shadow:0 0 14px rgba(255,255,255,.6);
+      animation: heroMarkSpin 1s ease-out both, heroMarkGlow 2.8s ease-in-out 1s infinite;
+    }
+    .hero-name{
+      margin:0;
+      font-size:32px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      letter-spacing:.06em;
+      animation: heroNameGlow 1.2s ease-out both, heroNameFloat 3s ease-in-out 1.2s infinite;
+    }
+    .hero-message{
+      margin:8px 0 0;
+      font-size:15px;
+      opacity:.96;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      text-transform: uppercase;
+      letter-spacing:.04em;
+      line-height:1.5;
+    }
+    .sms-btn {
+      background: linear-gradient(135deg, #0f5bd8, #1e7bff);
+      color: white;
+      border: none;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(15,91,216,0.22);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+      width:auto;
+    }
+    .sms-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(15,91,216,0.28);
+      filter: brightness(1.03);
+    }
+    .sms-btn:active { transform: scale(0.98); }
+    .sms-btn::after {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 55%);
+      opacity: 0;
+      transform: scale(0.2);
+      pointer-events: none;
+    }
+    .sms-btn:active::after { animation: smsSpark 0.55s ease-out; }
+    .sms-icon { font-size: 18px; line-height: 1; }
+    .sms-container {
+      display:flex;
+      gap:12px;
+      margin-bottom:18px;
+      flex-wrap: wrap;
+      justify-content:flex-start;
+    }
+
+    @keyframes heroMarkSpin{
+      0%{transform:rotate(-180deg) scale(.75); opacity:0;}
+      100%{transform:rotate(0deg) scale(1); opacity:1;}
+    }
+    @keyframes heroMarkGlow{
+      0%{box-shadow:0 0 12px rgba(255,255,255,.45);}
+      50%{box-shadow:0 0 24px rgba(255,255,255,.8);}
+      100%{box-shadow:0 0 12px rgba(255,255,255,.45);}
+    }
+    @keyframes heroNameGlow{
+      0%{opacity:0; transform:translateY(8px) scale(.96); text-shadow:0 0 0 rgba(255,255,255,0);}
+      60%{opacity:1; transform:translateY(0) scale(1.03); text-shadow:0 0 18px rgba(255,255,255,.45);}
+      100%{opacity:1; transform:translateY(0) scale(1); text-shadow:0 0 8px rgba(255,255,255,.15);}
+    }
+    @keyframes heroNameFloat{
+      0%{transform:translateY(0);}
+      50%{transform:translateY(-2px);}
+      100%{transform:translateY(0);}
+    }
+    @keyframes smsSpark {
+      0% { opacity: 0.95; transform: scale(0.2); }
+      100% { opacity: 0; transform: scale(1.4); }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="hero-fabiola">
+    <div class="hero-inner">
+      <div class="hero-mark">F</div>
+      <div class="hero-text">
+        <h1 class="hero-name">Fabiola</h1>
+        <p class="hero-message">CADA PISCINA QUE CUIDAS HABLA DE TU RESPONSABILIDAD, TU ESFUERZO Y TU VALOR. GRACIAS POR TU TRABAJO</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sms-container">
+    <button class="sms-btn" onclick="window.location.href='sms:+19192983602?body=Hola Dayana'">
+      <span class="sms-icon">💬</span><span>Dayana</span>
+    </button>
+    <button class="sms-btn" onclick="window.location.href='sms:+19192983602?body=Hola Dayana, ya revisé mi pago de este mes.'">
+      <span class="sms-icon">💵</span><span>Notificar Pago</span>
+    </button>
+  </div>
+
+  <div class="wrap">
+    <section class="hero admin-only">
+      <h1>
+        <span class="app-mark">D</span>
+        <span>Registro de Piscinas</span>
+      </h1>
+      <p class="subtitle"><span class="dayana-name">Dayana</span></p>
+    </section>
+
+    <div class="top-grid admin-only">
+      <section class="card">
+        <h2 id="formTitle">Información de la Piscina</h2>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="empleada">Nombres</label>
+            <select id="empleada">
+              <option>Fabiola</option>
+              <option>Asmirian</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="nombrePiscina">Nombre de Piscina</label>
+            <input id="nombrePiscina" placeholder="Ej. Piscina Residencial Los Pinos" />
+          </div>
+
+          <div class="field full">
+            <label for="direccion">Dirección</label>
+            <input id="direccion" placeholder="Calle, número, colonia, ciudad" />
+          </div>
+
+          <div class="field">
+            <label for="clave">Clave para Entrar</label>
+            <input id="clave" placeholder="Clave o indicación de acceso" />
+          </div>
+
+          <div class="field">
+            <label for="inicio">Día de Inicio</label>
+            <input id="inicio" type="date" />
+          </div>
+
+          <div class="field">
+            <label for="cierre">Día de Cierre</label>
+            <input id="cierre" type="date" />
+          </div>
+
+          <div class="field">
+            <label for="visitas">Número de Visitas</label>
+            <input id="visitas" type="number" min="0" step="1" placeholder="Ej. 4" />
+          </div>
+
+          <div class="field">
+            <label for="valorVisita">Valor por Visita</label>
+            <input id="valorVisita" type="number" min="0" step="0.01" placeholder="Ej. 350" />
+          </div>
+
+          <div class="field">
+            <label for="basura">Día de Sacar la Basura</label>
+            <input id="basura" placeholder="Ej. Martes" />
+          </div>
+
+          <div class="field">
+            <div class="mes-inline">
+              <label for="pagoMes" style="margin:0;">Detalle de Pago</label>
+              <button type="button" class="primary" id="btnPagoPiscina" style="min-width:190px; font-size:1rem;">Detalle de Pago</button>
+            </div>
+            <input id="pagoMes" type="number" min="0" step="0.01" placeholder="Se calcula automáticamente con extras por mes" />
+          </div>
+
+          <div class="field full">
+            <label for="notas">Notas</label>
+            <textarea id="notas" placeholder="Observaciones principales de esta piscina..."></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="saveBtn">Guardar información</button>
+          <button class="secondary" id="clearBtn">Limpiar</button>
+          <button class="warning" id="cancelEditBtn" style="display:none;">Cancelar edición</button>
+        </div>
+      </section>
+
+      <aside class="card">
+        <h3>Resumen</h3>
+        <div class="stats">
+          <div class="stat">
+            <div class="k">Total de piscinas</div>
+            <div class="v" id="statTotal">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Pago mensual total</div>
+            <div class="v" id="statPago">$0.00</div>
+          </div>
+          <div class="stat">
+            <div class="k">Piscinas de Fabiola</div>
+            <div class="v" id="statFabiola">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Piscinas de Asmirian</div>
+            <div class="v" id="statAsmirian">0</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="worker-note">
+      <h2 style="margin:0 0 8px;">Tus Piscinas</h2>
+      <p class="muted" style="margin:0;">Aquí puedes ver solo la información de tus piscinas, revisar tu pago mensual y escribir notas si hiciste una labor extra o necesitas material.</p>
+    </section>
+
+    <section class="card" style="margin-top:18px;">
+      <h3>💼 Cierre de Pago por Mes</h3>
+      <div class="actions" style="margin-top:0; margin-bottom:14px;">
+        <select id="mesCierreVista" style="max-width:260px;">
+          <option value="enero">Enero</option>
+          <option value="febrero">Febrero</option>
+          <option value="marzo">Marzo</option>
+          <option value="abril">Abril</option>
+          <option value="mayo">Mayo</option>
+          <option value="junio">Junio</option>
+          <option value="julio">Julio</option>
+          <option value="agosto">Agosto</option>
+          <option value="septiembre">Septiembre</option>
+          <option value="octubre">Octubre</option>
+          <option value="noviembre">Noviembre</option>
+          <option value="diciembre">Diciembre</option>
+        </select>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="k">Fabiola</div>
+          <div style="margin-bottom:8px;"><strong>Total del Mes:</strong> <span id="cierreVistaTotal">-</span></div>
+          <div style="margin-bottom:8px;"><strong>Descuento de Seguro:</strong> <span id="cierreVistaSeguro">-</span></div>
+          <div style="margin-bottom:8px;"><strong>Total a Depositar:</strong> <span id="cierreVistaDepositar">-</span></div>
+          <div><strong>Fecha:</strong> <span id="cierreVistaFecha">-</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <input id="searchInput" placeholder="Buscar por piscina, dirección o día de sacar la basura..." />
+      <select id="filterEmpleado" class="admin-only">
+        <option value="">Todas las empleadas</option>
+        <option value="Fabiola">Fabiola</option>
+        <option value="Asmirian">Asmirian</option>
+      </select>
+      <button class="secondary admin-only" id="exportBtn">Exportar respaldo</button>
+    </section>
+
+    <section class="card">
+      <h2>Registros Guardados</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Piscina</th>
+              <th>Dirección</th>
+              <th>Clave</th>
+              <th>Inicio</th>
+              <th>Cierre</th>
+              <th>Visitas</th>
+              <th>Días de Visitas</th>
+              <th>Día de Sacar la Basura</th>
+              <th>Pago Mensual</th>
+              <th>Notas</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div id="emptyState" class="empty">Todavía no hay registros guardados.</div>
+    </section>
+
+    <div class="foot">Hecha para Fabiola y Asmirian · Versión elegante de uso privado para control y seguimiento.</div>
+  </div>
+
+
+  <dialog id="paymentModal">
+    <div class="modal-head">
+      <h3 style="margin:0; font-size:1.35rem; color:#ffffff; letter-spacing:.03em;">💵 Detalle de Pago de Esta Piscina</h3>
+    </div>
+    <div class="modal-body">
+      <p class="muted" style="margin-top:0;">Aquí puedes editar directamente el pago de esta piscina por mes.</p>
+      <div class="month-grid" id="yearPaymentGrid"></div>
+      <div class="actions" style="margin-top:18px">
+        <button class="primary" id="savePaymentBtn">Guardar pagos</button>
+        <button class="secondary" id="closePaymentBtn">Cerrar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="monthModal">
+    <div class="modal-head">
+      <h3 style="margin:0;">Detalle por Mes</h3>
+    </div>
+    <div class="modal-body">
+      <p class="muted" style="margin-top:0;">Aquí puedes escribir extras por piscina en cada mes. El total se suma automáticamente a Pago al Mes.</p>
+      <div class="month-grid">
+        <div class="month-card"><h4>Mayo</h4><label for="mayoExtra">Extra</label><input id="mayoExtra" type="number" min="0" step="0.01" placeholder="Ej. 100" /><label for="mayoNota">Detalle</label><textarea id="mayoNota" placeholder="Ej. contaminación, químico extra, visita especial..."></textarea></div>
+        <div class="month-card"><h4>Junio</h4><label for="junioExtra">Extra</label><input id="junioExtra" type="number" min="0" step="0.01" placeholder="Ej. 0" /><label for="junioNota">Detalle</label><textarea id="junioNota"></textarea></div>
+        <div class="month-card"><h4>Julio</h4><label for="julioExtra">Extra</label><input id="julioExtra" type="number" min="0" step="0.01" placeholder="Ej. 0" /><label for="julioNota">Detalle</label><textarea id="julioNota"></textarea></div>
+        <div class="month-card"><h4>Agosto</h4><label for="agostoExtra">Extra</label><input id="agostoExtra" type="number" min="0" step="0.01" placeholder="Ej. 0" /><label for="agostoNota">Detalle</label><textarea id="agostoNota"></textarea></div>
+        <div class="month-card"><h4>Septiembre</h4><label for="septiembreExtra">Extra</label><input id="septiembreExtra" type="number" min="0" step="0.01" placeholder="Ej. 0" /><label for="septiembreNota">Detalle</label><textarea id="septiembreNota"></textarea></div>
+      </div>
+      <div class="month-summary">💵 Total Del Mes: <span id="monthExtrasTotal" class="total-mes-highlight">$0.00</span></div>
+      <div class="actions" style="margin-top:18px">
+        <button class="primary" id="saveMonthBtn">Guardar meses</button>
+        <button class="secondary" id="closeMonthBtn">Cerrar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="notesModal">
+    <div class="modal-head">
+      <h3 id="modalTitle" style="margin:0;">Editar información</h3>
+    </div>
+    <div class="modal-body">
+      <label for="modalTextarea" id="modalLabel">Contenido</label>
+      <textarea id="modalTextarea" style="min-height:180px;"></textarea>
+      <div class="actions" style="margin-top:18px">
+        <button class="primary" id="saveModalBtn">Guardar</button>
+        <button class="secondary" id="closeModalBtn">Cerrar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-JYZFe4EvET54o9IHVnAybqFqC1zId08",
+      authDomain: "registro--piscina-dayana.firebaseapp.com",
+      projectId: "registro--piscina-dayana",
+      storageBucket: "registro--piscina-dayana.firebasestorage.app",
+      messagingSenderId: "471063992478",
+      appId: "1:471063992478:web:6c49b26aa13fa1963b038f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let registros = [];
+    let editingId = null;
+    let modalEdit = { id: null, field: null };
+
+    const $ = (id) => document.getElementById(id);
+
+    const fields = {
+      empleada: $("empleada"),
+      nombrePiscina: $("nombrePiscina"),
+      direccion: $("direccion"),
+      clave: $("clave"),
+      inicio: $("inicio"),
+      cierre: $("cierre"),
+      visitas: $("visitas"),
+      valorVisita: $("valorVisita"),
+      basura: $("basura"),
+      pagoMes: $("pagoMes"),
+      notas: $("notas"),
+    };
+
+    const monthFields = {
+      mayoExtra: $("mayoExtra"), mayoNota: $("mayoNota"),
+      junioExtra: $("junioExtra"), junioNota: $("junioNota"),
+      julioExtra: $("julioExtra"), julioNota: $("julioNota"),
+      agostoExtra: $("agostoExtra"), agostoNota: $("agostoNota"),
+      septiembreExtra: $("septiembreExtra"), septiembreNota: $("septiembreNota"),
+    };
+    const yearMonths = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+
+    function money(v){
+      return new Intl.NumberFormat("es-MX", { style:"currency", currency:"MXN" }).format(Number(v || 0));
+    }
+
+
+    function applyEmployeeVisibility(){
+      const empSel = document.getElementById("empleada");
+      if(!empSel) return;
+      const emp = empSel.value;
+      yearMonths.forEach(m=>{
+        const fabInput = document.getElementById(m+"Fabiola");
+        const asmInput = document.getElementById(m+"Asmirian");
+        if(fabInput && asmInput){
+          const fabLabel = document.querySelector('label[for="'+m+'Fabiola"]');
+          const asmLabel = document.querySelector('label[for="'+m+'Asmirian"]');
+          if(emp === "Fabiola"){
+            if(fabInput) fabInput.style.display = "";
+            if(fabLabel) fabLabel.style.display = "";
+            if(asmInput) asmInput.style.display = "none";
+            if(asmLabel) asmLabel.style.display = "none";
+          }else{
+            if(fabInput) fabInput.style.display = "none";
+            if(fabLabel) fabLabel.style.display = "none";
+            if(asmInput) asmInput.style.display = "";
+            if(asmLabel) asmLabel.style.display = "";
+          }
+        }
+      });
+    }
+
+    function escapeHtml(str){
+      return String(str || "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function buildMonths(){
+      return {
+        mayo: { extra: Number(monthFields.mayoExtra.value || 0), nota: monthFields.mayoNota.value.trim() },
+        junio: { extra: Number(monthFields.junioExtra.value || 0), nota: monthFields.junioNota.value.trim() },
+        julio: { extra: Number(monthFields.julioExtra.value || 0), nota: monthFields.julioNota.value.trim() },
+        agosto: { extra: Number(monthFields.agostoExtra.value || 0), nota: monthFields.agostoNota.value.trim() },
+        septiembre: { extra: Number(monthFields.septiembreExtra.value || 0), nota: monthFields.septiembreNota.value.trim() },
+      };
+    }
+
+    function getMonthsExtraTotal(months){
+      if(!months) return 0;
+      return ["mayo","junio","julio","agosto","septiembre"].reduce((acc, key) => acc + Number((months[key] && months[key].extra) || 0), 0);
+    }
+
+    function loadMonthsToModal(months = {}){
+      const safe = (m, prop, fallback="") => ((months[m] && months[m][prop]) ?? fallback);
+      monthFields.mayoExtra.value = safe("mayo","extra","");
+      monthFields.mayoNota.value = safe("mayo","nota","");
+      monthFields.junioExtra.value = safe("junio","extra","");
+      monthFields.junioNota.value = safe("junio","nota","");
+      monthFields.julioExtra.value = safe("julio","extra","");
+      monthFields.julioNota.value = safe("julio","nota","");
+      monthFields.agostoExtra.value = safe("agosto","extra","");
+      monthFields.agostoNota.value = safe("agosto","nota","");
+      monthFields.septiembreExtra.value = safe("septiembre","extra","");
+      monthFields.septiembreNota.value = safe("septiembre","nota","");
+      $("monthExtrasTotal").textContent = money(getMonthsExtraTotal(months));
+    }
+    function createYearPaymentCards(){
+      const grid = $("yearPaymentGrid");
+      if(!grid || grid.dataset.ready) return;
+      const labels = {
+        enero:"Enero", febrero:"Febrero", marzo:"Marzo", abril:"Abril",
+        mayo:"Mayo", junio:"Junio", julio:"Julio", agosto:"Agosto",
+        septiembre:"Septiembre", octubre:"Octubre", noviembre:"Noviembre", diciembre:"Diciembre"
+      };
+      grid.innerHTML = yearMonths.map(m => `
+        <div class="month-card">
+          <h4>${labels[m]}</h4>
+          <label for="${m}Piscina">Pago piscina</label>
+          <input id="${m}Piscina" type="number" min="0" step="0.01" />
+          <label for="${m}Fabiola">Pago Fabiola</label>
+          <input id="${m}Fabiola" type="number" min="0" step="0.01" />
+          <label for="${m}Asmirian">Pago Asmirian</label>
+          <input id="${m}Asmirian" type="number" min="0" step="0.01" />
+          <label for="${m}Ganancia">Mi Ganancia</label>
+          <input id="${m}Ganancia" type="number" min="0" step="0.01" />
+          <label for="${m}Seguro">Extras</label>
+          <input id="${m}Seguro" type="number" min="0" step="0.01" />
+          <label for="${m}Fecha">Fecha de Pago</label>
+          <input id="${m}Fecha" type="date" />
+          <div class="month-summary"><span class="total-mes-highlight">💵 Total: <span id="${m}TotalGeneral">$0.00</span></span></div>
+        </div>
+      `).join("");
+      grid.dataset.ready = "1";
+      grid.addEventListener("input", refreshPagoPiscinaTotal);
+    }
+
+    function buildYearlyPayments(){
+      const data = {};
+      yearMonths.forEach(m => {
+        data[m] = {
+          piscina: Number($(m + "Piscina").value || 0),
+          fabiola: Number($(m + "Fabiola").value || 0),
+          asmirian: Number($(m + "Asmirian").value || 0),
+          ganancia: Number($(m + "Ganancia").value || 0),
+          seguro: Number($(m + "Seguro")?.value || 0),
+          extra: Number((((buildMonths()||{})[m]||{}).extra) || 0),
+          fecha: $(m + "Fecha")?.value || "",
+          nota: ""
+        };
+      });
+      return data;
+    }
+
+    function refreshEachMonthTotal(){
+      const data = buildYearlyPayments();
+      const emp = fields.empleada.value === "Asmirian" ? "asmirian" : "fabiola";
+      yearMonths.forEach(m => {
+        const it = data[m] || {};
+        const total = Number(it[emp] || 0) + Number(it.seguro || 0);
+        const el = $(m + "TotalGeneral");
+        if (el) el.textContent = money(total);
+      });
+    }
+
+    function getYearPiscinaTotal(yearlyPayments){
+      if(!yearlyPayments) return 0;
+      return yearMonths.reduce((acc, m) => {
+        const item = yearlyPayments[m] || {};
+        return acc + Number(item.piscina || 0) + Number(item.extra || 0) - Number(item.seguro || 0);
+      }, 0);
+    }
+
+    function loadYearlyPaymentsToModal(yearlyPayments = {}){
+      createYearPaymentCards(); setTimeout(applyEmployeeVisibility, 0);
+      yearMonths.forEach(m => {
+        const item = yearlyPayments[m] || {};
+        $(m + "Piscina").value = item.piscina ?? "";
+        $(m + "Fabiola").value = item.fabiola ?? "";
+        $(m + "Asmirian").value = item.asmirian ?? "";
+        $(m + "Ganancia").value = item.ganancia ?? "";
+        if($(m + "Seguro")) $(m + "Seguro").value = item.seguro ?? "";
+        if($(m + "Fecha")) $(m + "Fecha").value = item.fecha ?? "";
+        if($(m + "Nota")) $(m + "Nota").value = item.nota ?? "";
+      });
+      refreshEachMonthTotal();
+    }
+
+    function refreshPagoPiscinaTotal(){
+      const total = getYearPiscinaTotal(buildYearlyPayments());
+      if(!fields.pagoMes.dataset.touched || !fields.pagoMes.value){
+        fields.pagoMes.value = String(total || "");
+      }
+      refreshEachMonthTotal();
+    }
+
+    function refreshPagoMes(){
+      const base = Number(fields.visitas.value || 0) * Number(fields.valorVisita.value || 0);
+      const extras = getMonthsExtraTotal(buildMonths());
+      if(!fields.pagoMes.dataset.touched || !fields.pagoMes.value){
+        fields.pagoMes.value = String(base + extras || "");
+      }
+      $("monthExtrasTotal").textContent = money(extras);
+    }
+
+    function resetForm(){
+      Object.values(fields).forEach(el => el.value = "");
+      fields.empleada.value = "Fabiola";
+      fields.pagoMes.dataset.touched = "";
+      editingId = null;
+      $("formTitle").textContent = "Información de la Piscina";
+      $("saveBtn").textContent = "Guardar información";
+      $("cancelEditBtn").style.display = "none";
+      loadMonthsToModal();
+      loadYearlyPaymentsToModal();
+      fields.empleada.focus();
+    }
+
+    function buildRecord(){
+      const visitas = Number(fields.visitas.value || 0);
+      const valorVisita = Number(fields.valorVisita.value || 0);
+      const pagoMesManual = Number(fields.pagoMes.value || 0);
+      const months = buildMonths();
+      const yearlyPayments = buildYearlyPayments();
+      const pagoCalculado = getYearPiscinaTotal(yearlyPayments);
+
+      return {
+        id: editingId || crypto.randomUUID(),
+        empleada: fields.empleada.value.trim(),
+        nombrePiscina: fields.nombrePiscina.value.trim(),
+        direccion: fields.direccion.value.trim(),
+        clave: fields.clave.value.trim(),
+        inicio: fields.inicio.value,
+        cierre: fields.cierre.value,
+        visitas,
+        valorVisita,
+        basura: fields.basura.value.trim(),
+        pagoMes: pagoMesManual > 0 ? pagoMesManual : pagoCalculado,
+        yearlyPayments,
+        months,
+        notas: fields.notas.value.trim(),
+        creadoEn: new Date().toISOString()
+      };
+    }
+
+    function validate(record){
+      if(!record.nombrePiscina) return "Escribe el nombre de la piscina.";
+      if(!record.direccion) return "Escribe la dirección.";
+      return "";
+    }
+
+    async function saveRecord(){
+      const record = buildRecord();
+      const error = validate(record);
+      if(error){
+        alert(error);
+        return;
+      }
+      await setDoc(doc(db, "piscinas", record.id), record);
+      createYearPaymentCards(); setTimeout(applyEmployeeVisibility, 0);
+    resetForm();
+    watchCierreFabiola();
+    }
+
+    function editRecord(id){
+      const r = registros.find(x => x.id === id);
+      if(!r) return;
+      editingId = id;
+      Object.keys(fields).forEach(k => fields[k].value = r[k] ?? "");
+      loadMonthsToModal(r.months || {});
+      loadYearlyPaymentsToModal(r.yearlyPayments || {});
+      $("formTitle").textContent = "Editar información";
+      $("saveBtn").textContent = "Guardar cambios";
+      $("cancelEditBtn").style.display = "inline-block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteRecord(id){
+      const r = registros.find(x => x.id === id);
+      if(!r) return;
+      if(confirm("¿Seguro que quieres borrar este registro?")){
+        await deleteDoc(doc(db, "piscinas", id));
+        if(editingId === id) resetForm();
+      }
+    }
+
+
+    function openPaymentModal(){
+      loadYearlyPaymentsToModal((registros.find(x => x.id === editingId) || {}).yearlyPayments || buildYearlyPayments());
+      yearMonths.forEach(m => {
+        const piscina = $(m + "Piscina");
+        const fab = $(m + "Fabiola");
+        const asm = $(m + "Asmirian");
+        const gan = $(m + "Ganancia");
+        const seg = $(m + "Seguro");
+        const fec = $(m + "Fecha");
+        const nota = $(m + "Nota");
+
+        const piscinaLbl = document.querySelector('label[for="' + m + 'Piscina"]');
+        const fabLbl = document.querySelector('label[for="' + m + 'Fabiola"]');
+        const asmLbl = document.querySelector('label[for="' + m + 'Asmirian"]');
+        const ganLbl = document.querySelector('label[for="' + m + 'Ganancia"]');
+        const segLbl = document.querySelector('label[for="' + m + 'Seguro"]');
+        const fecLbl = document.querySelector('label[for="' + m + 'Fecha"]');
+        const notaLbl = document.querySelector('label[for="' + m + 'Nota"]');
+
+        for (const el of [piscina, fab, asm, gan, seg, fec, nota]) { if(el) el.style.display = ""; }
+        for (const el of [piscinaLbl, fabLbl, asmLbl, ganLbl, segLbl, fecLbl, notaLbl]) { if(el) el.style.display = ""; }
+      });
+      applyEmployeeVisibility();
+      $("paymentModal").showModal();
+      refreshPagoPiscinaTotal();
+    }
+
+    async function savePaymentDetails(){
+      fields.pagoMes.dataset.touched = "";
+      refreshPagoPiscinaTotal();
+      if(editingId){
+        const idx = registros.findIndex(x => x.id === editingId);
+        if(idx >= 0){
+          registros[idx].yearlyPayments = buildYearlyPayments();
+          registros[idx].pagoMes = Number(fields.pagoMes.value || 0);
+          await setDoc(doc(db, "piscinas", registros[idx].id), registros[idx]);
+        }
+      }
+      $("paymentModal").close();
+    }
+
+        function showYearlyPaymentSummary(id){
+      const r = registros.find(x => x.id === id);
+      if(!r) return;
+      editingId = id;
+      loadYearlyPaymentsToModal(r.yearlyPayments || {});
+      applyEmployeeVisibility();
+
+      yearMonths.forEach(m => {
+        const piscina = $(m + "Piscina");
+        const fab = $(m + "Fabiola");
+        const asm = $(m + "Asmirian");
+        const gan = $(m + "Ganancia");
+        const seg = $(m + "Seguro");
+        const fec = $(m + "Fecha");
+
+        const piscinaLbl = document.querySelector('label[for="' + m + 'Piscina"]');
+        const fabLbl = document.querySelector('label[for="' + m + 'Fabiola"]');
+        const asmLbl = document.querySelector('label[for="' + m + 'Asmirian"]');
+        const ganLbl = document.querySelector('label[for="' + m + 'Ganancia"]');
+        const segLbl = document.querySelector('label[for="' + m + 'Seguro"]');
+        const fecLbl = document.querySelector('label[for="' + m + 'Fecha"]');
+
+        // Hide fields that should not appear
+        if(piscina) piscina.style.display = "none";
+        if(piscinaLbl) piscinaLbl.style.display = "none";
+        if(gan) gan.style.display = "none";
+        if(ganLbl) ganLbl.style.display = "none";
+
+        // Show Extras + Fecha de Pago
+        if(seg) seg.style.display = "";
+        if(segLbl) { segLbl.style.display = ""; segLbl.textContent = "Extras"; }
+        if(fec) fec.style.display = "";
+        if(fecLbl) { fecLbl.style.display = ""; fecLbl.textContent = "Fecha de Pago"; }
+
+        // Show only corresponding employee payment
+        if(r.empleada === "Fabiola"){
+          if(fab) fab.style.display = "";
+          if(fabLbl) { fabLbl.style.display = ""; fabLbl.textContent = "Pago Fabiola"; }
+          if(asm) asm.style.display = "none";
+          if(asmLbl) asmLbl.style.display = "none";
+        } else {
+          if(fab) fab.style.display = "none";
+          if(fabLbl) fabLbl.style.display = "none";
+          if(asm) asm.style.display = "";
+          if(asmLbl) { asmLbl.style.display = ""; asmLbl.textContent = "Pago Asmirian"; }
+        }
+
+        const current = buildYearlyPayments()[m] || {};
+        const total = Number(current[r.empleada === "Asmirian" ? "asmirian" : "fabiola"] || 0) + Number(current.seguro || 0);
+        const totalEl = $(m + "TotalGeneral");
+        if(totalEl) totalEl.textContent = money(total);
+      });
+
+      const title = document.querySelector("#paymentModal .modal-head h3");
+      if(title) title.textContent = "💵 Detalles de Pago";
+      $("paymentModal").showModal();
+      refreshEachMonthTotal();
+    }
+
+    function showPagosExtras(id){
+      const r = registros.find(x => x.id === id);
+      if(!r) return;
+      const data = r.yearlyPayments || {};
+      const lines = yearMonths.map(m => {
+        const it = data[m] || {};
+        const cap = m.charAt(0).toUpperCase() + m.slice(1);
+        const total = Number(it.piscina || 0) + Number(it.extra || 0) - Number(it.seguro || 0);
+        return `<strong>${cap}</strong><br>Pago Base: ${money(it.piscina || 0)}<br>Pago Extra: ${money(it.extra || 0)}<br>Descuentos De Seguro: ${money(it.seguro || 0)}<br><span class="total-mes-highlight">💵 Total Del Mes: ${money(total)}</span>${it.nota ? "<br>Notas De Pago: " + escapeHtml(it.nota) : ""}`;
+      }).join("<br><br>");
+      showText("💵 Pagos Extras De Esta Piscina", lines);
+    }
+
+    function openMonthModal(){
+      $("monthModal").showModal();
+      refreshPagoMes();
+    }
+
+    function saveMonthDetails(){
+      fields.pagoMes.dataset.touched = "";
+      refreshPagoMes();
+      $("monthModal").close();
+    }
+
+    function showMonthSummary(id){
+      const r = registros.find(x => x.id === id);
+      if(!r) return;
+      const data = r.yearlyPayments || {};
+      const employeeLabel = "Fabiola";
+      const employeeField = "fabiola";
+      const lines = yearMonths.map(m => {
+        const it = data[m] || {};
+        const cap = m.charAt(0).toUpperCase() + m.slice(1);
+        const pago = Number(it[employeeField] || 0);
+        const extras = Number(it.seguro || 0);
+        const fecha = it.fecha || "-";
+        const total = pago + extras;
+        return `<strong>${cap}</strong><br>Pago ${employeeLabel}: ${money(pago)}<br>Extras: ${money(extras)}<br>Fecha de Pago: ${escapeHtml(fecha)}<br><span class="total-mes-highlight">💵 Total: ${money(total)}</span>`;
+      }).join("<br><br>");
+      showText(`Pago Mensual de ${r.nombrePiscina}`, lines);
+    }
+
+    function showText(title, text, id = null, field = null){
+      $("modalTitle").textContent = title;
+
+      const old = document.getElementById("modalPreview");
+      if(old) old.remove();
+
+      if(id && field){
+        $("modalLabel").style.display = "block";
+        $("modalTextarea").style.display = "block";
+        $("modalTextarea").value = text || "";
+        $("saveModalBtn").style.display = "inline-block";
+      } else {
+        $("modalLabel").style.display = "none";
+        $("modalTextarea").style.display = "none";
+        const preview = document.createElement("div");
+        preview.id = "modalPreview";
+        preview.innerHTML = text || "<span class='muted'>No hay información.</span>";
+        $("modalTextarea").parentElement.insertBefore(preview, $("modalTextarea"));
+        $("saveModalBtn").style.display = "none";
+      }
+
+      modalEdit = { id, field };
+      $("notesModal").showModal();
+    }
+
+    async function saveModalEdit(){
+      if(!modalEdit.id || !modalEdit.field) {
+        $("notesModal").close();
+        return;
+      }
+      const idx = registros.findIndex(x => x.id === modalEdit.id);
+      if(idx === -1) return;
+      registros[idx][modalEdit.field] = $("modalTextarea").value.trim();
+      saveCache(registros);
+      try{
+        if(!navigator.onLine) throw new Error("offline");
+        await setDoc(doc(db, "piscinas", registros[idx].id), registros[idx]);
+      }catch(e){
+        if(modalEdit.field === "notas"){
+          queuePendingNote(registros[idx].id, registros[idx].notas);
+          alert("La nota quedó guardada en este teléfono y se sincronizará cuando vuelva el internet.");
+        }
+      }
+      render();
+      $("notesModal").close();
+    }
+
+    function exportData(){
+      const blob = new Blob([JSON.stringify(registros, null, 2)], { type:"application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "respaldo_registro_piscinas.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+
+    function watchCierreFabiola(){
+      const mes = $("mesCierreVista")?.value || "enero";
+      const cierreRef = doc(db, "cierres_pago", `fabiola_${mes}`);
+      onSnapshot(cierreRef, (snap) => {
+        const data = snap.exists() ? snap.data() : {};
+        $("cierreVistaTotal").textContent = data.totalMes ? money(data.totalMes) : "-";
+        $("cierreVistaSeguro").textContent = data.descuentoSeguro ? money(data.descuentoSeguro) : "-";
+        $("cierreVistaDepositar").textContent = data.totalDepositar ? money(data.totalDepositar) : "-";
+        $("cierreVistaFecha").textContent = data.fecha || "-";
+      });
+    }
+
+    function renderResumenMes(){
+      const mes = $("mesResumen")?.value || "enero";
+
+      const totalFabiola = registros.reduce((acc, r) => {
+        const pago = Number((((r.yearlyPayments || {})[mes] || {}).fabiola) || 0);
+        return acc + pago;
+      }, 0);
+
+      const totalAsmirian = registros.reduce((acc, r) => {
+        const pago = Number((((r.yearlyPayments || {})[mes] || {}).asmirian) || 0);
+        return acc + pago;
+      }, 0);
+
+      $("resumenFabiola").textContent = money(totalFabiola);
+      $("resumenAsmirian").textContent = money(totalAsmirian);
+      $("resumenGeneral").textContent = money(totalFabiola + totalAsmirian);
+    }
+
+
+    const CACHE_KEY = "fabiola_cache_registros";
+    const PENDING_NOTES_KEY = "fabiola_pending_notes";
+
+    function saveCache(data){
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify(data || [])); } catch(e){ console.warn("No se pudo guardar cache", e); }
+    }
+
+    function loadCache(){
+      try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "[]"); } catch(e){ return []; }
+    }
+
+    function getPendingNotes(){
+      try { return JSON.parse(localStorage.getItem(PENDING_NOTES_KEY) || "[]"); } catch(e){ return []; }
+    }
+
+    function setPendingNotes(items){
+      localStorage.setItem(PENDING_NOTES_KEY, JSON.stringify(items || []));
+    }
+
+    function queuePendingNote(id, notes){
+      const items = getPendingNotes().filter(x => x.id !== id);
+      items.push({ id, notas: notes });
+      setPendingNotes(items);
+    }
+
+    async function syncPendingNotes(){
+      if(!navigator.onLine) return;
+      const items = getPendingNotes();
+      if(!items.length) return;
+      const remaining = [];
+      for (const item of items){
+        try {
+          const r = registros.find(x => x.id === item.id);
+          if(!r) continue;
+          r.notas = item.notas;
+          await setDoc(doc(db, "piscinas", r.id), r);
+        } catch(err) {
+          remaining.push(item);
+        }
+      }
+      setPendingNotes(remaining);
+    }
+
+    function showOfflineBanner(){
+      let box = document.getElementById("offlineBox");
+      if(!box){
+        box = document.createElement("div");
+        box.id = "offlineBox";
+        box.style.cssText = "position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;background:#12365f;color:#fff;padding:12px 14px;border-radius:16px;font-weight:700;box-shadow:0 10px 24px rgba(0,0,0,.18);display:none;";
+        document.body.appendChild(box);
+      }
+      if(navigator.onLine){
+        box.style.display = "none";
+      } else {
+        box.textContent = "Sin internet: puedes ver tus piscinas y guardar notas. Se sincronizarán cuando vuelva la señal.";
+        box.style.display = "block";
+      }
+    }
+
+    function render(){
+      const q = $("searchInput").value.trim().toLowerCase();
+
+      const filtrados = registros.filter(r => {
+        if(r.empleada !== "Fabiola") return false;
+        const text = [
+          r.nombrePiscina, r.direccion, r.clave, r.basura, r.diasVisitas, r.notas
+        ].join(" ").toLowerCase();
+        return !q || text.includes(q);
+      });
+
+      $("tbody").innerHTML = filtrados.map(r => `
+        <tr>
+          <td><strong>${escapeHtml(r.nombrePiscina)}</strong></td>
+          <td><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.direccion)}" target="_blank">${escapeHtml(r.direccion)}</a></td>
+          <td>${escapeHtml(r.clave || "-")}</td>
+          <td>${escapeHtml(r.inicio || "-")}</td>
+          <td>${escapeHtml(r.cierre || "-")}</td>
+          <td><span class="tag">${escapeHtml(r.visitas)}</span></td>
+          <td>${escapeHtml(r.diasVisitas || "-")}</td>
+          <td>${escapeHtml(r.basura || "-")}</td>
+          <td><button class="secondary" onclick="window.showMonthSummary('${r.id}')">Pago Mensual</button></td>
+          <td><button class="secondary" onclick="window.editNotes('${r.id}')">Notas</button></td>
+        </tr>
+      `).join("");
+
+      $("emptyState").style.display = filtrados.length ? "none" : "block";
+      if($("statTotal")) $("statTotal").textContent = filtrados.length;
+      if($("statPago")) $("statPago").textContent = money(filtrados.reduce((a,b) => a + Number(b.pagoMes || 0), 0));
+      if($("statFabiola")) $("statFabiola").textContent = filtrados.length;
+      if($("statAsmirian")) $("statAsmirian").textContent = 0;
+    }
+
+    function editNotes(id){
+      const r = registros.find(x => x.id === id);
+      if(!r) return;
+      showText(`Notas de ${r.nombrePiscina}`, r.notas || "", r.id, "notas");
+    }
+
+    $("btnPagoPiscina").addEventListener("click", openPaymentModal);
+    $("savePaymentBtn").addEventListener("click", savePaymentDetails);
+    $("closePaymentBtn").addEventListener("click", () => $("paymentModal").close());
+    $("saveBtn").addEventListener("click", saveRecord);
+    
+    $("saveMonthBtn").addEventListener("click", saveMonthDetails);
+    $("closeMonthBtn").addEventListener("click", () => $("monthModal").close());
+    $("clearBtn").addEventListener("click", resetForm);
+    $("cancelEditBtn").addEventListener("click", resetForm);
+    $("searchInput").addEventListener("input", render);
+    $("mesCierreVista")?.addEventListener("change", watchCierreFabiola);
+    $("mesResumen")?.addEventListener("change", renderResumenMes);
+    const empEl = document.getElementById("empleada"); if(empEl){ empEl.addEventListener("change", applyEmployeeVisibility);} 
+    $("exportBtn").addEventListener("click", exportData);
+    $("saveModalBtn").addEventListener("click", saveModalEdit);
+    $("closeModalBtn").addEventListener("click", () => {
+      const old = document.getElementById("modalPreview");
+      if(old) old.remove();
+      $("modalLabel").style.display = "block";
+      $("modalTextarea").style.display = "block";
+      $("notesModal").close();
+    });
+
+    ["visitas","valorVisita"].forEach(id => $(id).addEventListener("input", refreshPagoMes));
+    Object.values(monthFields).forEach(el => el.addEventListener("input", refreshPagoMes));
+    fields.pagoMes.addEventListener("input", () => fields.pagoMes.dataset.touched = "1");
+
+    window.editRecord = editRecord;
+    window.deleteRecord = deleteRecord;
+    window.showMonthSummary = showMonthSummary;
+    window.showYearlyPaymentSummary = showYearlyPaymentSummary;
+    window.showPagosExtras = showPagosExtras;
+    window.editNotes = editNotes;
+
+        registros = loadCache();
+    if (registros.length) render();
+    showOfflineBanner();
+    window.addEventListener("online", () => { showOfflineBanner(); syncPendingNotes(); });
+    window.addEventListener("offline", showOfflineBanner);
+
+    onSnapshot(collection(db, "piscinas"), (snapshot) => {
+      registros = snapshot.docs.map(d => d.data());
+      saveCache(registros);
+      render();
+      syncPendingNotes();
+      showOfflineBanner();
+    }, (error) => {
+      console.error("Error al sincronizar:", error);
+      registros = loadCache();
+      render();
+      showOfflineBanner();
+    });
+
+    createYearPaymentCards(); setTimeout(applyEmployeeVisibility, 0);
+    resetForm();
+    watchCierreFabiola();
+  </script>
+</body>
+</html>
