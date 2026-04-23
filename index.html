@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fabiola - Piscinas</title>
+  <title>Registro de Piscinas</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="theme-color" content="#163a63" />
@@ -431,7 +432,28 @@
       100% { opacity: 0; transform: scale(1.4); }
     }
 
-  </style>
+  
+    #reciboCard, #reciboCard *{
+      box-sizing:border-box;
+      transform:none !important;
+      filter:none !important;
+      text-size-adjust:none;
+      -webkit-text-size-adjust:none;
+    }
+    #reciboCard{ zoom:1; }
+    @media (max-width:760px){
+      #reciboModal .modal-body{
+        overflow:auto;
+        -webkit-overflow-scrolling:touch;
+      }
+      #reciboCard{
+        width:720px !important;
+        max-width:720px !important;
+        min-width:720px !important;
+      }
+    }
+
+</style>
 </head>
 <body>
 
@@ -472,7 +494,6 @@
             <label for="empleada">Nombres</label>
             <select id="empleada">
               <option>Fabiola</option>
-              <option>Asmirian</option>
             </select>
           </div>
 
@@ -549,7 +570,7 @@
             <div class="v" id="statPago">$0.00</div>
           </div>
           <div class="stat">
-            <div class="k">Piscinas de Fabiola</div>
+            <div class="k">Piscinas de Asmirian</div>
             <div class="v" id="statFabiola">0</div>
           </div>
           <div class="stat">
@@ -560,9 +581,24 @@
       </aside>
     </div>
 
-    <section class="worker-note">
-      <h2 style="margin:0 0 8px;">Tus Piscinas</h2>
-      <p class="muted" style="margin:0;">Aquí puedes ver solo la información de tus piscinas, revisar tu pago mensual y escribir notas si hiciste una labor extra o necesitas material.</p>
+    <section class="worker-note" style="background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(248,251,255,.94));">
+      <h2 style="margin:0 0 8px; color:#12365f;">Tus Piscinas</h2>
+      <p class="muted" style="margin:0; line-height:1.6;">Aquí puedes revisar tus piscinas, consultar tu pago mensual, ver tu cierre del mes y guardar un comprobante bonito cuando lo necesites.</p>
+    </section>
+
+    <section class="card" style="margin-top:18px; background:linear-gradient(180deg,#ffffff,#f8fbff);">
+      <h3 style="margin:0 0 12px; color:#1e5ea8;">📌 Notas</h3>
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <div style="width:52px; height:52px; border-radius:16px; background:#edf4ff; display:flex; align-items:center; justify-content:center; font-size:26px; flex:0 0 auto;">📝</div>
+        <div style="flex:1;">
+          <div id="notaAsmirianTexto" style="font-size:1rem; line-height:1.7; color:#243142; min-height:110px; white-space:pre-wrap; word-break:break-word;">No hay notas por ahora.</div>
+          <div style="margin-top:10px; font-size:.9rem; color:#6f7b88;">Actualizada: <span id="notaAsmirianActualizada">-</span></div>
+          <div id="estadoNotaAsmirian" style="margin-top:6px; font-size:.88rem; color:#64748b;">Esperando nota…</div>
+          <div class="actions" style="margin-top:12px;">
+            <button class="secondary" id="refrescarNotaAsmirianBtn" type="button" style="width:100%;">🔄 Refrescar notas</button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="card" style="margin-top:18px;">
@@ -585,12 +621,18 @@
       </div>
 
       <div class="stats">
-        <div class="stat">
-          <div class="k">Fabiola</div>
-          <div style="margin-bottom:8px;"><strong>Total del Mes:</strong> <span id="cierreVistaTotal">-</span></div>
-          <div style="margin-bottom:8px;"><strong>Descuento de Seguro:</strong> <span id="cierreVistaSeguro">-</span></div>
-          <div style="margin-bottom:8px;"><strong>Total a Depositar:</strong> <span id="cierreVistaDepositar">-</span></div>
-          <div><strong>Fecha:</strong> <span id="cierreVistaFecha">-</span></div>
+        <div class="stat" style="background:linear-gradient(180deg,#ffffff,#f7fbff);">
+          <div class="k" style="color:#1e5ea8;">Fabiola</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><strong>Total del Mes:</strong> <span id="cierreVistaTotal" style="font-weight:800; color:#12365f;">-</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><strong>Extras:</strong> <span id="cierreVistaExtras" style="font-weight:800; color:#15803d;">-</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><strong>Descuento de Seguro:</strong> <span id="cierreVistaSeguro" style="font-weight:800; color:#b04a4a;">-</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><strong>Total a Depositar:</strong> <span id="cierreVistaDepositar" style="font-weight:900; color:#0f4fa8; font-size:1.12rem;">-</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;"><strong>Fecha:</strong> <span id="cierreVistaFecha" style="font-weight:800; color:#12365f;">-</span></div>
+          <div class="actions" style="margin-top:0;">
+            <button class="primary" id="reciboAsmirianBtn" type="button" style="width:100%;">🧾 Ver Comprobante</button>
+            <button class="secondary" id="refrescarCierreBtn" type="button" style="width:100%;">🔄 Refrescar</button>
+          </div>
+          <div id="estadoSyncAsmirian" style="margin-top:10px; font-size:.88rem; color:#64748b;">Esperando datos del mes…</div>
         </div>
       </div>
     </section>
@@ -682,9 +724,217 @@
     </div>
   </dialog>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <dialog id="reciboModal">
+    <div class="modal-body" style="background:rgba(247,249,252,.96); padding:24px;">
+      <div id="reciboCard" style="
+        width:720px;
+        max-width:720px;
+        min-width:720px;
+        background:#ffffff;
+        border-radius:28px;
+        margin:0 auto;
+        box-shadow:none;
+        overflow:hidden;
+        border:1px solid #d8e4f5;
+        position:relative;
+      ">
+        <div style="
+          position:absolute; inset:0; pointer-events:none;
+          background:
+            radial-gradient(circle at top left, rgba(198,220,255,.28), transparent 22%),
+            radial-gradient(circle at bottom right, rgba(198,220,255,.18), transparent 20%);
+        "></div>
+
+        <div style="position:relative; padding:28px 34px 18px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
+            <div style="color:#2563eb; font-size:14px; line-height:12px; letter-spacing:6px; font-weight:900;">
+              • • • •<br>• • • •<br>• • • •
+            </div>
+
+            <div style="text-align:center; flex:1;">
+              <div style="
+                width:82px; height:82px; margin:0 auto 10px;
+                border-radius:50%;
+                background:linear-gradient(135deg,#0d56d8,#1e5ea8);
+                display:flex; align-items:center; justify-content:center;
+                color:#fff; font-size:38px; font-weight:900;
+                box-shadow:0 10px 22px rgba(30,94,168,.22), inset 0 2px 0 rgba(255,255,255,.22);
+              ">◡</div>
+              <div style="font-size:20px; font-weight:900; color:#183a7a;">App Piscina</div>
+            </div>
+
+            <div style="
+              min-width:150px;
+              background:#fff;
+              border:1px solid #d9e6fb;
+              border-radius:18px;
+              padding:14px 16px;
+              box-shadow:0 8px 18px rgba(16,55,108,.10);
+              color:#2563eb;
+              font-weight:800;
+              font-size:16px;
+              text-align:left;
+            ">🛡️ Pago<br>Confirmado</div>
+          </div>
+
+          <div style="margin:16px auto 0; width:100%; display:flex; align-items:center; gap:14px;">
+            <div style="height:2px; background:#d9e6fb; flex:1;"></div>
+            <div style="color:#6ea0ff; font-size:18px;">✦</div>
+            <div style="height:2px; background:#d9e6fb; flex:1;"></div>
+          </div>
+
+          <div style="text-align:center; margin-top:18px;">
+            <div style="
+              font-size:34px;
+              line-height:1.1;
+              font-weight:900;
+              letter-spacing:.04em;
+              color:#123b85;
+              text-transform:uppercase;
+            ">COMPROBANTE DE PAGO</div>
+          </div>
+
+          <div style="margin:14px auto 0; width:46%; display:flex; align-items:center; gap:14px;">
+            <div style="height:2px; background:#d9e6fb; flex:1;"></div>
+            <div style="color:#6ea0ff; font-size:18px;">✦</div>
+            <div style="height:2px; background:#d9e6fb; flex:1;"></div>
+          </div>
+
+          <div style="text-align:center; margin-top:18px;">
+            <div id="reciboNombre" style="
+              font-family:Georgia, 'Times New Roman', serif;
+              font-size:28px;
+              font-style:italic;
+              font-weight:500;
+              color:#21428a;
+            ">Asmirian</div>
+          </div>
+
+          <div style="text-align:center; margin-top:16px;">
+            <div id="reciboMes" style="
+              display:inline-flex;
+              align-items:center;
+              gap:10px;
+              padding:10px 20px;
+              border-radius:16px;
+              background:#edf4ff;
+              color:#1746a2;
+              font-size:16px;
+              font-weight:900;
+              letter-spacing:.02em;
+            ">📅 MES: ENERO</div>
+          </div>
+
+          <div style="
+            margin:26px auto 0;
+            background:#ffffff;
+            border:1px solid #e6eef9;
+            border-radius:22px;
+            box-shadow:0 8px 22px rgba(17,35,72,.06);
+            padding:14px 22px;
+          ">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:14px; padding:14px 0; border-bottom:1px dashed #dbe6f6;">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div style="width:56px;height:56px;border-radius:50%;background:#edf4ff;display:flex;align-items:center;justify-content:center;font-size:28px;">💸</div>
+                <div>
+                  <div style="font-size:18px; font-weight:900; color:#163a63;">PAGO TOTAL</div>
+                  <div style="font-size:14px; color:#64748b;">Pago correspondiente al mes</div>
+                </div>
+              </div>
+              <div id="reciboPagoTotal" style="font-size:22px; font-weight:900; color:#1d4ed8;">$0.00</div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:14px; padding:16px 0; border-bottom:1px dashed #dbe6f6;">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div style="width:56px;height:56px;border-radius:50%;background:#e7f6e8;display:flex;align-items:center;justify-content:center;font-size:28px;">🎁</div>
+                <div>
+                  <div style="font-size:18px; font-weight:900; color:#15803d;">EXTRAS</div>
+                  <div style="font-size:14px; color:#64748b;">Pagos adicionales</div>
+                </div>
+              </div>
+              <div id="reciboExtras" style="font-size:22px; font-weight:900; color:#15803d;">$0.00</div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:14px; padding:16px 0;">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div style="width:56px;height:56px;border-radius:50%;background:#fde8e8;display:flex;align-items:center;justify-content:center;font-size:28px;">➖</div>
+                <div>
+                  <div style="font-size:18px; font-weight:900; color:#dc2626;">DESCUENTO</div>
+                  <div style="font-size:14px; color:#64748b;">Descuento de seguro</div>
+                </div>
+              </div>
+              <div id="reciboDescuento" style="font-size:22px; font-weight:900; color:#dc2626;">$0.00</div>
+            </div>
+
+            <div style="
+              margin-top:12px;
+              background:linear-gradient(135deg,#0d56d8,#123b85);
+              border-radius:18px;
+              padding:16px 18px;
+              display:flex;
+              align-items:center;
+              justify-content:space-between;
+              gap:16px;
+              box-shadow:0 12px 24px rgba(13,86,216,.18);
+            ">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div style="width:60px;height:60px;border-radius:50%;border:2px solid rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;">👛</div>
+                <div>
+                  <div style="font-size:20px; font-weight:900; color:#ffffff;">TOTAL PAGADO</div>
+                  <div style="font-size:14px; color:#dbeafe;">PAGO REALIZADO</div>
+                </div>
+              </div>
+              <div id="reciboTotalPagado" style="font-size:34px; font-weight:900; color:#ffffff; letter-spacing:.01em;">$0.00</div>
+            </div>
+          </div>
+
+          <div style="
+            margin-top:24px;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:18px;
+            align-items:center;
+          ">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div style="width:54px;height:54px;border-radius:50%;background:#edf4ff;display:flex;align-items:center;justify-content:center;font-size:26px;">📅</div>
+              <div>
+                <div style="font-size:14px; font-weight:900; color:#2563eb;">FECHA DE PAGO</div>
+                <div id="reciboFecha" style="font-size:18px; font-weight:800; color:#163a63; margin-top:3px;">-</div>
+              </div>
+            </div>
+
+            <div style="text-align:right; padding-right:8px;">
+              <div style="
+                font-family:Georgia, serif;
+                font-size:24px;
+                font-style:italic;
+                color:#1e40af;
+              ">Gracias</div>
+            </div>
+          </div>
+
+          <div style="margin:18px auto 0; width:100%; display:flex; align-items:center; gap:14px;">
+            <div style="height:2px; background:#d9e6fb; flex:1;"></div>
+            <div style="color:#6ea0ff; font-size:18px;">✦</div>
+            <div style="height:2px; background:#d9e6fb; flex:1;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:16px;">
+        <button class="secondary" id="cerrarReciboBtn">Cerrar</button>
+        <button class="primary" id="descargarReciboBtn" type="button" style="margin-left:10px;">📸 Guardar / Compartir</button>
+        <div style="margin-top:10px; font-size:.88rem; color:#64748b;">En iPhone se abrirá la imagen para guardarla o compartirla.</div>
+      </div>
+    </div>
+  </dialog>
+
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA-JYZFe4EvET54o9IHVnAybqFqC1zId08",
@@ -950,7 +1200,8 @@
       await setDoc(doc(db, "piscinas", record.id), record);
       createYearPaymentCards(); setTimeout(applyEmployeeVisibility, 0);
     resetForm();
-    watchCierreFabiola();
+    watchCierreAsmirian();
+    escucharNotaAsmirian();
     }
 
     function editRecord(id){
@@ -1151,17 +1402,7 @@
       const idx = registros.findIndex(x => x.id === modalEdit.id);
       if(idx === -1) return;
       registros[idx][modalEdit.field] = $("modalTextarea").value.trim();
-      saveCache(registros);
-      try{
-        if(!navigator.onLine) throw new Error("offline");
-        await setDoc(doc(db, "piscinas", registros[idx].id), registros[idx]);
-      }catch(e){
-        if(modalEdit.field === "notas"){
-          queuePendingNote(registros[idx].id, registros[idx].notas);
-          alert("La nota quedó guardada en este teléfono y se sincronizará cuando vuelva el internet.");
-        }
-      }
-      render();
+      await setDoc(doc(db, "piscinas", registros[idx].id), registros[idx]);
       $("notesModal").close();
     }
 
@@ -1175,15 +1416,181 @@
     }
 
 
-    function watchCierreFabiola(){
+    let cierreUnsub = null;
+
+    function pintarCierreAsmirian(data = {}, mes = "enero"){
+      $("cierreVistaTotal").textContent = (data.totalMes !== undefined && data.totalMes !== null) ? money(data.totalMes) : "-";
+      $("cierreVistaExtras").textContent = (data.extras !== undefined && data.extras !== null) ? money(data.extras) : "-";
+      $("cierreVistaSeguro").textContent = (data.descuentoSeguro !== undefined && data.descuentoSeguro !== null) ? money(data.descuentoSeguro) : "-";
+      $("cierreVistaDepositar").textContent = (data.totalDepositar !== undefined && data.totalDepositar !== null) ? money(data.totalDepositar) : "-";
+      $("cierreVistaFecha").textContent = data.fecha || "-";
+      const estado = $("estadoSyncAsmirian");
+      if(estado){
+        estado.textContent = data && Object.keys(data).length
+          ? `Sincronizado: ${mes}${data.actualizadoEn ? " · " + new Date(data.actualizadoEn).toLocaleString("es-MX") : ""}`
+          : `No hay cierre guardado para ${mes}.`;
+      }
+      window.__cierreAsmirianActual = data || {};
+    }
+
+    async function watchCierreAsmirian(){
       const mes = $("mesCierreVista")?.value || "enero";
+      if(cierreUnsub) cierreUnsub();
       const cierreRef = doc(db, "cierres_pago", `fabiola_${mes}`);
-      onSnapshot(cierreRef, (snap) => {
-        const data = snap.exists() ? snap.data() : {};
-        $("cierreVistaTotal").textContent = data.totalMes ? money(data.totalMes) : "-";
-        $("cierreVistaSeguro").textContent = data.descuentoSeguro ? money(data.descuentoSeguro) : "-";
-        $("cierreVistaDepositar").textContent = data.totalDepositar ? money(data.totalDepositar) : "-";
-        $("cierreVistaFecha").textContent = data.fecha || "-";
+
+      try{
+        const snapOnce = await getDoc(cierreRef);
+        pintarCierreAsmirian(snapOnce.exists() ? snapOnce.data() : {}, mes);
+      }catch(e){
+        console.error("Error leyendo cierre:", e);
+        const estado = $("estadoSyncAsmirian");
+        if(estado) estado.textContent = "No se pudo leer el cierre.";
+      }
+
+      cierreUnsub = onSnapshot(cierreRef, (snap) => {
+        pintarCierreAsmirian(snap.exists() ? snap.data() : {}, mes);
+      });
+    }
+
+
+    const nombreMesBonito = {
+      enero:"ENERO", febrero:"FEBRERO", marzo:"MARZO", abril:"ABRIL",
+      mayo:"MAYO", junio:"JUNIO", julio:"JULIO", agosto:"AGOSTO",
+      septiembre:"SEPTIEMBRE", octubre:"OCTUBRE", noviembre:"NOVIEMBRE", diciembre:"DICIEMBRE"
+    };
+
+    function formatearFechaBonita(fecha){
+      if(!fecha || fecha === "-") return "-";
+      const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+      const partes = String(fecha).split("-");
+      if(partes.length !== 3) return fecha;
+      const anio = partes[0];
+      const mes = Number(partes[1]) - 1;
+      const dia = Number(partes[2]);
+      return `${dia} de ${meses[mes]} de ${anio}`;
+    }
+
+    function openReciboAsmirian(){
+      const mes = $("mesCierreVista")?.value || "enero";
+      const data = window.__cierreAsmirianActual || {};
+
+      const pagoTotal = Number(data.totalMes || 0);
+      const extras = Number(data.extras || 0);
+      const descuento = Number(data.descuentoSeguro || 0);
+      const totalPagado = Number(data.totalDepositar || 0);
+      const fechaTxt = data.fecha || "-";
+
+      $("reciboNombre").textContent = "Fabiola";
+      $("reciboMes").textContent = "📅 MES: " + (nombreMesBonito[mes] || mes);
+      $("reciboPagoTotal").textContent = money(pagoTotal);
+      $("reciboExtras").textContent = money(extras);
+      $("reciboDescuento").textContent = money(descuento);
+      $("reciboTotalPagado").textContent = money(totalPagado);
+      $("reciboFecha").textContent = fechaTxt === "-" ? "-" : formatearFechaBonita(fechaTxt);
+
+      $("reciboModal").showModal();
+    }
+
+    async function descargarReciboComoImagen(){
+      const card = $("reciboCard");
+      if(!card || typeof html2canvas === "undefined"){
+        alert("No se pudo preparar la imagen del comprobante.");
+        return;
+      }
+
+      try{
+        const canvas = await html2canvas(card, {
+          scale: 3,
+          useCORS: true,
+          backgroundColor: "#ffffff",
+          logging: false,
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: 900,
+          width: 720
+        });
+
+        const mes = ($("mesCierreVista")?.value || "mes").toLowerCase();
+        const fileName = `comprobante-fabiola-${mes}.png`;
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+        if(!blob){
+          alert("No se pudo generar la imagen.");
+          return;
+        }
+
+        const file = new File([blob], fileName, { type: "image/png" });
+
+        if(navigator.canShare && navigator.canShare({ files: [file] })){
+          await navigator.share({
+            files: [file],
+            title: "Comprobante de Pago",
+            text: "Comprobante de pago"
+          });
+          return;
+        }
+
+        const url = URL.createObjectURL(blob);
+        const isiPhone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+        if(isiPhone){
+          const win = window.open(url, "_blank");
+          if(win){
+            alert("En iPhone, mantén presionada la imagen y toca 'Guardar en Fotos' o compártela.");
+          }
+          setTimeout(() => URL.revokeObjectURL(url), 10000);
+          return;
+        }
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+      }catch(err){
+        console.error(err);
+        alert("No se pudo guardar el comprobante.");
+      }
+    }
+
+
+    function formatearFechaHora(fechaIso){
+      if(!fechaIso) return "-";
+      try{
+        return new Date(fechaIso).toLocaleString("es-MX");
+      }catch(e){
+        return fechaIso;
+      }
+    }
+
+    let notaAsmirianUnsub = null;
+
+    function pintarNotaAsmirian(data = {}){
+      if($("notaAsmirianTexto")) $("notaAsmirianTexto").textContent = (data.texto || "").trim() || "No hay notas por ahora.";
+      if($("notaAsmirianActualizada")) $("notaAsmirianActualizada").textContent = formatearFechaHora(data.actualizadoEn);
+      if($("estadoNotaAsmirian")){
+        $("estadoNotaAsmirian").textContent = data && Object.keys(data).length
+          ? `Sincronizada${data.actualizadoEn ? " · " + formatearFechaHora(data.actualizadoEn) : ""}`
+          : "No hay notas guardadas.";
+      }
+    }
+
+    async function escucharNotaAsmirian(){
+      const ref = doc(db, "notas_empleadas", "fabiola");
+      if(notaAsmirianUnsub) notaAsmirianUnsub();
+
+      try{
+        const snapOnce = await getDoc(ref);
+        pintarNotaAsmirian(snapOnce.exists() ? snapOnce.data() : {});
+      }catch(e){
+        console.error("Error leyendo nota:", e);
+        if($("estadoNotaAsmirian")) $("estadoNotaAsmirian").textContent = "No se pudo leer la nota.";
+      }
+
+      notaAsmirianUnsub = onSnapshot(ref, (snap) => {
+        pintarNotaAsmirian(snap.exists() ? snap.data() : {});
       });
     }
 
@@ -1205,71 +1612,11 @@
       $("resumenGeneral").textContent = money(totalFabiola + totalAsmirian);
     }
 
-
-    const CACHE_KEY = "fabiola_cache_registros";
-    const PENDING_NOTES_KEY = "fabiola_pending_notes";
-
-    function saveCache(data){
-      try { localStorage.setItem(CACHE_KEY, JSON.stringify(data || [])); } catch(e){ console.warn("No se pudo guardar cache", e); }
-    }
-
-    function loadCache(){
-      try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "[]"); } catch(e){ return []; }
-    }
-
-    function getPendingNotes(){
-      try { return JSON.parse(localStorage.getItem(PENDING_NOTES_KEY) || "[]"); } catch(e){ return []; }
-    }
-
-    function setPendingNotes(items){
-      localStorage.setItem(PENDING_NOTES_KEY, JSON.stringify(items || []));
-    }
-
-    function queuePendingNote(id, notes){
-      const items = getPendingNotes().filter(x => x.id !== id);
-      items.push({ id, notas: notes });
-      setPendingNotes(items);
-    }
-
-    async function syncPendingNotes(){
-      if(!navigator.onLine) return;
-      const items = getPendingNotes();
-      if(!items.length) return;
-      const remaining = [];
-      for (const item of items){
-        try {
-          const r = registros.find(x => x.id === item.id);
-          if(!r) continue;
-          r.notas = item.notas;
-          await setDoc(doc(db, "piscinas", r.id), r);
-        } catch(err) {
-          remaining.push(item);
-        }
-      }
-      setPendingNotes(remaining);
-    }
-
-    function showOfflineBanner(){
-      let box = document.getElementById("offlineBox");
-      if(!box){
-        box = document.createElement("div");
-        box.id = "offlineBox";
-        box.style.cssText = "position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;background:#12365f;color:#fff;padding:12px 14px;border-radius:16px;font-weight:700;box-shadow:0 10px 24px rgba(0,0,0,.18);display:none;";
-        document.body.appendChild(box);
-      }
-      if(navigator.onLine){
-        box.style.display = "none";
-      } else {
-        box.textContent = "Sin internet: puedes ver tus piscinas y guardar notas. Se sincronizarán cuando vuelva la señal.";
-        box.style.display = "block";
-      }
-    }
-
     function render(){
       const q = $("searchInput").value.trim().toLowerCase();
 
       const filtrados = registros.filter(r => {
-        if(r.empleada !== "Fabiola") return false;
+        if(String(r.empleada || "").trim().toLowerCase() !== "fabiola") return false;
         const text = [
           r.nombrePiscina, r.direccion, r.clave, r.basura, r.diasVisitas, r.notas
         ].join(" ").toLowerCase();
@@ -1294,8 +1641,8 @@
       $("emptyState").style.display = filtrados.length ? "none" : "block";
       if($("statTotal")) $("statTotal").textContent = filtrados.length;
       if($("statPago")) $("statPago").textContent = money(filtrados.reduce((a,b) => a + Number(b.pagoMes || 0), 0));
-      if($("statFabiola")) $("statFabiola").textContent = filtrados.length;
-      if($("statAsmirian")) $("statAsmirian").textContent = 0;
+      if($("statFabiola")) $("statFabiola").textContent = 0;
+      if($("statAsmirian")) $("statAsmirian").textContent = filtrados.length;
     }
 
     function editNotes(id){
@@ -1314,7 +1661,12 @@
     $("clearBtn").addEventListener("click", resetForm);
     $("cancelEditBtn").addEventListener("click", resetForm);
     $("searchInput").addEventListener("input", render);
-    $("mesCierreVista")?.addEventListener("change", watchCierreFabiola);
+    $("mesCierreVista")?.addEventListener("change", watchCierreAsmirian);
+    $("refrescarCierreBtn")?.addEventListener("click", watchCierreAsmirian);
+    $("reciboAsmirianBtn")?.addEventListener("click", openReciboAsmirian);
+    $("cerrarReciboBtn")?.addEventListener("click", () => $("reciboModal").close());
+    $("descargarReciboBtn")?.addEventListener("click", descargarReciboComoImagen);
+    $("refrescarNotaAsmirianBtn")?.addEventListener("click", escucharNotaAsmirian);
     $("mesResumen")?.addEventListener("change", renderResumenMes);
     const empEl = document.getElementById("empleada"); if(empEl){ empEl.addEventListener("change", applyEmployeeVisibility);} 
     $("exportBtn").addEventListener("click", exportData);
@@ -1337,29 +1689,17 @@
     window.showYearlyPaymentSummary = showYearlyPaymentSummary;
     window.showPagosExtras = showPagosExtras;
     window.editNotes = editNotes;
-
-        registros = loadCache();
-    if (registros.length) render();
-    showOfflineBanner();
-    window.addEventListener("online", () => { showOfflineBanner(); syncPendingNotes(); });
-    window.addEventListener("offline", showOfflineBanner);
+    window.openReciboAsmirian = openReciboAsmirian;
+    window.descargarReciboComoImagen = descargarReciboComoImagen;
 
     onSnapshot(collection(db, "piscinas"), (snapshot) => {
       registros = snapshot.docs.map(d => d.data());
-      saveCache(registros);
       render();
-      syncPendingNotes();
-      showOfflineBanner();
-    }, (error) => {
-      console.error("Error al sincronizar:", error);
-      registros = loadCache();
-      render();
-      showOfflineBanner();
-    });
+    }, (error) => console.error("Error al sincronizar:", error));
 
     createYearPaymentCards(); setTimeout(applyEmployeeVisibility, 0);
     resetForm();
-    watchCierreFabiola();
+    watchCierreAsmirian();
   </script>
 </body>
 </html>
