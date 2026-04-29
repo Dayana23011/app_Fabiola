@@ -468,24 +468,14 @@
   </div>
 
   <div class="sms-container">
-    <button class="sms-btn" onclick="window.location.href='sms:+19192983602?body=Hola Dayana'">
+    <button class="sms-btn" onclick="window.location.href='https://chat.whatsapp.com/HUr6MoIpY94901OlV2foAz?mode=gi_t'">
       <span class="sms-icon">💬</span><span>Dayana</span>
     </button>
-    <button class="sms-btn" onclick="window.location.href='sms:+19192983602?body=Hola Dayana, ya revisé mi pago de este mes.'">
-      <span class="sms-icon">💵</span><span>Notificar Pago</span>
-    </button>
+    
   </div>
 
   <div class="wrap">
-    <section class="hero admin-only">
-      <h1>
-        <span class="app-mark">D</span>
-        <span>Registro de Piscinas</span>
-      </h1>
-      <p class="subtitle"><span class="dayana-name">Dayana</span></p>
-    </section>
-
-    <div class="top-grid admin-only">
+<div class="top-grid admin-only">
       <section class="card">
         <h2 id="formTitle">Información de la Piscina</h2>
 
@@ -581,27 +571,25 @@
       </aside>
     </div>
 
-    <section class="worker-note" style="background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(248,251,255,.94));">
-      <h2 style="margin:0 0 8px; color:#12365f;">Tus Piscinas</h2>
-      <p class="muted" style="margin:0; line-height:1.6;">Aquí puedes revisar tus piscinas, consultar tu pago mensual, ver tu cierre del mes y guardar un comprobante bonito cuando lo necesites.</p>
-    </section>
+    
 
-    <section class="card" style="margin-top:18px; background:linear-gradient(180deg,#ffffff,#f8fbff);">
-      <h3 style="margin:0 0 12px; color:#1e5ea8;">📌 Notas</h3>
-      <div style="display:flex; gap:12px; align-items:flex-start;">
-        <div style="width:52px; height:52px; border-radius:16px; background:#edf4ff; display:flex; align-items:center; justify-content:center; font-size:26px; flex:0 0 auto;">📝</div>
+    <section class="card" style="margin-top:18px; background:linear-gradient(135deg,#fffdf7,#f3f8ff); border:1px solid #dbe7ff;">
+      <h3 style="margin:0 0 12px; color:#12365f; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:1.35rem;">📌</span> IMPORTANTE
+      </h3>
+      <div style="display:flex; gap:14px; align-items:flex-start;">
+        <div style="width:54px; height:54px; border-radius:18px; background:#edf4ff; display:flex; align-items:center; justify-content:center; font-size:28px; flex:0 0 auto;">📝</div>
         <div style="flex:1;">
-          <div id="notaAsmirianTexto" style="font-size:1rem; line-height:1.7; color:#243142; min-height:110px; white-space:pre-wrap; word-break:break-word;">No hay notas por ahora.</div>
-          <div style="margin-top:10px; font-size:.9rem; color:#6f7b88;">Actualizada: <span id="notaAsmirianActualizada">-</span></div>
-          <div id="estadoNotaAsmirian" style="margin-top:6px; font-size:.88rem; color:#64748b;">Esperando nota…</div>
+          <div id="notaImportanteTexto" style="font-size:1.03rem; line-height:1.75; color:#243142; min-height:92px; white-space:pre-wrap; word-break:break-word; font-weight:600;">No hay notas importantes por ahora.</div>
+          <div style="margin-top:12px; font-size:.9rem; color:#6f7b88;">Actualizada: <span id="notaImportanteActualizada">-</span></div>
+          <div id="estadoNotaImportante" style="margin-top:6px; font-size:.88rem; color:#64748b;">Esperando nota importante…</div>
           <div class="actions" style="margin-top:12px;">
-            <button class="secondary" id="refrescarNotaAsmirianBtn" type="button" style="width:100%;">🔄 Refrescar notas</button>
+            <button class="secondary" id="refrescarNotaImportanteBtn" type="button" style="width:100%;">🔄 Refrescar importante</button>
           </div>
         </div>
       </div>
     </section>
-
-    <section class="card" style="margin-top:18px;">
+<section class="card" style="margin-top:18px;">
       <h3>💼 Cierre de Pago por Mes</h3>
       <div class="actions" style="margin-top:0; margin-bottom:14px;">
         <select id="mesCierreVista" style="max-width:260px;">
@@ -662,7 +650,7 @@
               <th>Días de Visitas</th>
               <th>Día de Sacar la Basura</th>
               <th>Pago Mensual</th>
-              <th>Notas</th>
+              <th>Notas para Fabiola</th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
@@ -1201,7 +1189,7 @@
       createYearPaymentCards(); setTimeout(applyEmployeeVisibility, 0);
     resetForm();
     watchCierreAsmirian();
-    escucharNotaAsmirian();
+    escucharNotaImportante();
     }
 
     function editRecord(id){
@@ -1355,16 +1343,16 @@
       const r = registros.find(x => x.id === id);
       if(!r) return;
       const data = r.yearlyPayments || {};
-      const employeeLabel = "Fabiola";
       const employeeField = "fabiola";
       const lines = yearMonths.map(m => {
         const it = data[m] || {};
         const cap = m.charAt(0).toUpperCase() + m.slice(1);
-        const pago = Number(it[employeeField] || 0);
-        const extras = Number(it.seguro || 0);
+        const pago = Number(it[employeeField] ?? it.pagoFabiola ?? it.pago ?? r.pagoMes ?? 0);
+        const extras = Number(it.seguro ?? it.extra ?? 0);
+        const notaExtra = String(it.nota ?? it.notaExtra ?? "").trim();
         const fecha = it.fecha || "-";
         const total = pago + extras;
-        return `<strong>${cap}</strong><br>Pago ${employeeLabel}: ${money(pago)}<br>Extras: ${money(extras)}<br>Fecha de Pago: ${escapeHtml(fecha)}<br><span class="total-mes-highlight">💵 Total: ${money(total)}</span>`;
+        return `<strong>${cap}</strong><br>Pago: ${money(pago)}<br>Extras: ${money(extras)}${notaExtra ? "<br>Nota del extra: " + escapeHtml(notaExtra) : ""}<br>Fecha de Pago: ${escapeHtml(fecha)}<br><span class="total-mes-highlight">💵 Total: ${money(total)}</span>`;
       }).join("<br><br>");
       showText(`Pago Mensual de ${r.nombrePiscina}`, lines);
     }
@@ -1377,6 +1365,7 @@
 
       if(id && field){
         $("modalLabel").style.display = "block";
+        $("modalLabel").textContent = field === "notasFabiola" ? "Notas para Fabiola" : "Contenido";
         $("modalTextarea").style.display = "block";
         $("modalTextarea").value = text || "";
         $("saveModalBtn").style.display = "inline-block";
@@ -1565,32 +1554,44 @@
       }
     }
 
-    let notaAsmirianUnsub = null;
 
-    function pintarNotaAsmirian(data = {}){
-      if($("notaAsmirianTexto")) $("notaAsmirianTexto").textContent = (data.texto || "").trim() || "No hay notas por ahora.";
-      if($("notaAsmirianActualizada")) $("notaAsmirianActualizada").textContent = formatearFechaHora(data.actualizadoEn);
-      if($("estadoNotaAsmirian")){
-        $("estadoNotaAsmirian").textContent = data && Object.keys(data).length
-          ? `Sincronizada${data.actualizadoEn ? " · " + formatearFechaHora(data.actualizadoEn) : ""}`
-          : "No hay notas guardadas.";
+
+    let notaImportanteUnsub = null;
+
+    function formatearFechaHoraImportante(fechaIso){
+      if(!fechaIso) return "-";
+      try{
+        return new Date(fechaIso).toLocaleString("es-MX");
+      }catch(e){
+        return fechaIso;
       }
     }
 
-    async function escucharNotaAsmirian(){
+    function pintarNotaImportante(data = {}){
+      const texto = (data.texto || "").trim();
+      if($("notaImportanteTexto")) $("notaImportanteTexto").textContent = texto || "No hay notas importantes por ahora.";
+      if($("notaImportanteActualizada")) $("notaImportanteActualizada").textContent = formatearFechaHoraImportante(data.actualizadoEn);
+      if($("estadoNotaImportante")){
+        $("estadoNotaImportante").textContent = data && Object.keys(data).length
+          ? `Sincronizada${data.actualizadoEn ? " · " + formatearFechaHoraImportante(data.actualizadoEn) : ""}`
+          : "No hay nota importante guardada.";
+      }
+    }
+
+    async function escucharNotaImportante(){
       const ref = doc(db, "notas_empleadas", "fabiola");
-      if(notaAsmirianUnsub) notaAsmirianUnsub();
+      if(notaImportanteUnsub) notaImportanteUnsub();
 
       try{
         const snapOnce = await getDoc(ref);
-        pintarNotaAsmirian(snapOnce.exists() ? snapOnce.data() : {});
+        pintarNotaImportante(snapOnce.exists() ? snapOnce.data() : {});
       }catch(e){
-        console.error("Error leyendo nota:", e);
-        if($("estadoNotaAsmirian")) $("estadoNotaAsmirian").textContent = "No se pudo leer la nota.";
+        console.error("Error leyendo nota importante:", e);
+        if($("estadoNotaImportante")) $("estadoNotaImportante").textContent = "No se pudo leer la nota importante.";
       }
 
-      notaAsmirianUnsub = onSnapshot(ref, (snap) => {
-        pintarNotaAsmirian(snap.exists() ? snap.data() : {});
+      notaImportanteUnsub = onSnapshot(ref, (snap) => {
+        pintarNotaImportante(snap.exists() ? snap.data() : {});
       });
     }
 
@@ -1618,7 +1619,7 @@
       const filtrados = registros.filter(r => {
         if(String(r.empleada || "").trim().toLowerCase() !== "fabiola") return false;
         const text = [
-          r.nombrePiscina, r.direccion, r.clave, r.basura, r.diasVisitas, r.notas
+          r.nombrePiscina, r.direccion, r.clave, r.basura, r.diasVisitas, r.notasFabiola
         ].join(" ").toLowerCase();
         return !q || text.includes(q);
       });
@@ -1634,7 +1635,7 @@
           <td>${escapeHtml(r.diasVisitas || "-")}</td>
           <td>${escapeHtml(r.basura || "-")}</td>
           <td><button class="secondary" onclick="window.showMonthSummary('${r.id}')">Pago Mensual</button></td>
-          <td><button class="secondary" onclick="window.editNotes('${r.id}')">Notas</button></td>
+          <td><button class="secondary" onclick="window.editNotes('${r.id}')">Notas para Fabiola</button></td>
         </tr>
       `).join("");
 
@@ -1648,7 +1649,10 @@
     function editNotes(id){
       const r = registros.find(x => x.id === id);
       if(!r) return;
-      showText(`Notas de ${r.nombrePiscina}`, r.notas || "", r.id, "notas");
+
+      // Esta app no muestra las notas privadas de la app principal.
+      // Usa un campo separado solo para Fabiola.
+      showText(`Notas para Fabiola - ${r.nombrePiscina}`, r.notasFabiola || "", r.id, "notasFabiola");
     }
 
     $("btnPagoPiscina").addEventListener("click", openPaymentModal);
@@ -1664,9 +1668,9 @@
     $("mesCierreVista")?.addEventListener("change", watchCierreAsmirian);
     $("refrescarCierreBtn")?.addEventListener("click", watchCierreAsmirian);
     $("reciboAsmirianBtn")?.addEventListener("click", openReciboAsmirian);
+    $("refrescarNotaImportanteBtn")?.addEventListener("click", escucharNotaImportante);
     $("cerrarReciboBtn")?.addEventListener("click", () => $("reciboModal").close());
     $("descargarReciboBtn")?.addEventListener("click", descargarReciboComoImagen);
-    $("refrescarNotaAsmirianBtn")?.addEventListener("click", escucharNotaAsmirian);
     $("mesResumen")?.addEventListener("change", renderResumenMes);
     const empEl = document.getElementById("empleada"); if(empEl){ empEl.addEventListener("change", applyEmployeeVisibility);} 
     $("exportBtn").addEventListener("click", exportData);
@@ -1675,6 +1679,7 @@
       const old = document.getElementById("modalPreview");
       if(old) old.remove();
       $("modalLabel").style.display = "block";
+      $("modalLabel").textContent = "Contenido";
       $("modalTextarea").style.display = "block";
       $("notesModal").close();
     });
